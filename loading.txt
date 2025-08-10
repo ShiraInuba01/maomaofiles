@@ -144,7 +144,7 @@ task.delay(8, function()
     blur:Destroy()
     gui:Destroy()
 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/mainui.txt"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/mainUI.txt"))()
 end)
 
 
