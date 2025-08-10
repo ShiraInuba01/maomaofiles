@@ -1,4 +1,4 @@
-local Players = game:GetService("Players")
+local Players = game:GetService("Players") 
 local player = Players.LocalPlayer
 
 -- Create ScreenGui
@@ -51,17 +51,16 @@ title.TextSize = 26
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.RichText = true
 
-do -- Multiplier label
-    local multLabel = Instance.new("TextLabel", frame)
-    multLabel.Size = UDim2.new(1, 0, 0, 28)
-    multLabel.Position = UDim2.new(0, 0, 0, 40)
-    multLabel.BackgroundTransparency = 1
-    multLabel.Text = "<b>Multiplier:</b>"
-    multLabel.Font = Enum.Font.FredokaOne
-    multLabel.TextSize = 22
-    multLabel.TextColor3 = Color3.fromRGB(255, 220, 80)
-    multLabel.RichText = true
-end
+-- Multiplier label
+local multLabel = Instance.new("TextLabel", frame)
+multLabel.Size = UDim2.new(1, 0, 0, 28)
+multLabel.Position = UDim2.new(0, 0, 0, 40)
+multLabel.BackgroundTransparency = 1
+multLabel.Text = "<b>Multiplier:</b>"
+multLabel.Font = Enum.Font.FredokaOne
+multLabel.TextSize = 22
+multLabel.TextColor3 = Color3.fromRGB(255, 220, 80)
+multLabel.RichText = true
 
 local multiplier = 2
 local minMult, maxMult = 2, 100
@@ -115,11 +114,17 @@ plus.MouseButton1Click:Connect(function()
     end
 end)
 
+local TweenService = game:GetService("TweenService")
+local dupeBtnDefault = Color3.fromRGB(180, 100, 150)
+local dupeBtnHover = dupeBtnDefault:Lerp(Color3.new(1,1,1), 0.2)
+local dupeSeedsBtnDefault = Color3.fromRGB(180, 150, 180)
+local dupeSeedsBtnHover = dupeSeedsBtnDefault:Lerp(Color3.new(1,1,1), 0.2)
+
 -- Dupe Equipped Item Button
 local dupeBtn = Instance.new("TextButton", frame)
 dupeBtn.Size = UDim2.new(0.9, 0, 0, 40)
 dupeBtn.Position = UDim2.new(0.05, 0, 0, 120)
-dupeBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 150)
+dupeBtn.BackgroundColor3 = dupeBtnDefault
 dupeBtn.Text = "<b>Dupe Equipped Item</b>"
 dupeBtn.Font = Enum.Font.FredokaOne
 dupeBtn.TextSize = 20
@@ -127,24 +132,20 @@ dupeBtn.TextColor3 = Color3.new(1, 1, 1)
 dupeBtn.RichText = true
 dupeBtn.AutoButtonColor = true
 
-dupeBtn.MouseButton1Click:Connect(function()
-    local character = player.Character
-    if character then
-        local tool = character:FindFirstChildOfClass("Tool")
-        if tool and not tostring(tool):match("Seed") then
-            for i = 1, multiplier do
-                local cloneTool = tool:Clone()
-                cloneTool.Parent = player.Backpack
-            end
-        end
+dupeBtn.MouseEnter:Connect(function()
+    if not dupeBtn:GetAttribute("Running") then
+        TweenService:Create(dupeBtn, TweenInfo.new(0.2), {BackgroundColor3 = dupeBtnHover}):Play()
     end
+end)
+dupeBtn.MouseLeave:Connect(function()
+    TweenService:Create(dupeBtn, TweenInfo.new(0.2), {BackgroundColor3 = dupeBtnDefault}):Play()
 end)
 
 -- Dupe Seeds Button
 local dupeSeedsBtn = Instance.new("TextButton", frame)
 dupeSeedsBtn.Size = UDim2.new(0.9, 0, 0, 40)
 dupeSeedsBtn.Position = UDim2.new(0.05, 0, 0, 170)
-dupeSeedsBtn.BackgroundColor3 = Color3.fromRGB(180, 150, 180)
+dupeSeedsBtn.BackgroundColor3 = dupeSeedsBtnDefault
 dupeSeedsBtn.Text = "<b>Dupe Seeds</b>"
 dupeSeedsBtn.Font = Enum.Font.FredokaOne
 dupeSeedsBtn.TextSize = 20
@@ -152,12 +153,61 @@ dupeSeedsBtn.TextColor3 = Color3.new(1, 1, 1)
 dupeSeedsBtn.RichText = true
 dupeSeedsBtn.AutoButtonColor = true
 
-dupeSeedsBtn.MouseButton1Click:Connect(function()
-    local character = player.Character
-    if character then
-        local tool = character:FindFirstChildOfClass("Tool")
-        if tool and tostring(tool):match("Seed") then
-            tool.Name = tostring(tool):gsub(tostring(tool):match("(%d+)"), tonumber(tostring(tool):match("(%d+)") or 1) * multiplier)
-        end
+dupeSeedsBtn.MouseEnter:Connect(function()
+    if not dupeSeedsBtn:GetAttribute("Running") then
+        TweenService:Create(dupeSeedsBtn, TweenInfo.new(0.2), {BackgroundColor3 = dupeSeedsBtnHover}):Play()
     end
+end)
+dupeSeedsBtn.MouseLeave:Connect(function()
+    TweenService:Create(dupeSeedsBtn, TweenInfo.new(0.2), {BackgroundColor3 = dupeSeedsBtnDefault}):Play()
+end)
+
+-- Countdown function
+local function runCountdown(button, action)
+    if button:GetAttribute("Running") then return end
+    button:SetAttribute("Running", true)
+
+    local originalText = button.Text
+    for i = 10, 1, -1 do
+        button.Text = "<b>Wait "..i.."s</b>"
+        task.wait(1)
+    end
+
+    -- Execute the action after countdown
+    action()
+
+    button.Text = originalText
+    button:SetAttribute("Running", false)
+end
+
+-- Dupe Equipped Item Logic
+dupeBtn.MouseButton1Click:Connect(function()
+    runCountdown(dupeBtn, function()
+        local character = player.Character
+        if character then
+            local tool = character:FindFirstChildOfClass("Tool")
+            if tool and not tostring(tool):match("Seed") then
+                for i = 1, multiplier do
+                    local cloneTool = tool:Clone()
+                    cloneTool.Parent = player.Backpack
+                end
+            end
+        end
+    end)
+end)
+
+-- Dupe Seeds Logic
+dupeSeedsBtn.MouseButton1Click:Connect(function()
+    runCountdown(dupeSeedsBtn, function()
+        local character = player.Character
+        if character then
+            local tool = character:FindFirstChildOfClass("Tool")
+            if tool and tostring(tool):match("Seed") then
+                tool.Name = tostring(tool):gsub(
+                    tostring(tool):match("(%d+)"),
+                    tonumber(tostring(tool):match("(%d+)") or 1) * multiplier
+                )
+            end
+        end
+    end)
 end)
