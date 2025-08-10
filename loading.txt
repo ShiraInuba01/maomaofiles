@@ -74,7 +74,7 @@ task.spawn(animateGIF)
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, -120, 0, 60)
 title.Position = UDim2.new(0, 120, 0, 10)
-title.Text = "MaoMao Hub V3"
+title.Text = "MaoMao Hub"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.Font = Enum.Font.FredokaOne
 title.TextScaled = true
