@@ -57,7 +57,8 @@ local buttonData = {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/TradeExploit.txt"))()
     end},
     {text = "NEW 🐶 Pet Spawner", color = Color3.fromRGB(40, 56, 74), onClick = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/PetSpawner.txt"))()
+        local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+Spawner.Load()
     end},
 }
 
