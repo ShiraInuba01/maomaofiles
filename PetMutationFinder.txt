@@ -9,7 +9,8 @@ local RunService = game:GetService("RunService")
 
 local mutations = {
     "Shiny", "Inverted", "Frozen", "Windy", "Golden", "Mega", "Tiny",
-    "Tranquil", "IronSkin", "Radiant", "Rainbow", "Shocked", "Ascended"
+    "Tranquil", "IronSkin", "Radiant", "Rainbow", "Shocked", "Aromatic",
+	"Corrupted", "Ascended"
 }
 local currentMutation = mutations[math.random(#mutations)]
 local espVisible = true
