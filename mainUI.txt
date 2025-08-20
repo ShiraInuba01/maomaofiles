@@ -38,6 +38,26 @@ credit.Font = Enum.Font.FredokaOne
 credit.TextSize = 14
 credit.TextColor3 = Color3.fromRGB(200, 200, 200)
 
+local function showPopup(message)
+    local popup = Instance.new("TextLabel", screenGui)
+    popup.Size = UDim2.new(0, 315, 0, 40)
+    popup.Position = UDim2.new(0.5, -110, 0.5, -20)
+    popup.BackgroundColor3 = Color3.fromRGB(0, 128, 128)
+    popup.BackgroundTransparency = 0.1
+    popup.Text = message
+    popup.Font = Enum.Font.FredokaOne
+    popup.TextSize = 18
+    popup.TextColor3 = Color3.fromRGB(255, 255, 255)
+    popup.ZIndex = 100
+
+    Instance.new("UICorner", popup).CornerRadius = UDim.new(0, 8)
+
+    -- Fade out after 2 seconds
+    task.delay(2, function()
+        popup:Destroy()
+    end)
+end
+
 
 -- Button Data
 local buttonData = {
@@ -57,11 +77,35 @@ local buttonData = {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/TradeExploit.txt"))()
     end},
     {text = "NEW 🐶 Pet Spawner", color = Color3.fromRGB(40, 56, 74), onClick = function()
-        local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
-Spawner.Load()
+        showPopup("🐾 Pet Spawner is currently not available!")
     end},
 }
 
+local function addCooldown(button, originalText, onClick)
+    button.MouseButton1Click:Connect(function()
+        if button:GetAttribute("OnCooldown") then return end
+        button:SetAttribute("OnCooldown", true)
+
+        -- Countdown BEFORE running the script
+        for i = 3, 1, -1 do
+            button.Text = "⏳ "..i.."s"
+            button.AutoButtonColor = false
+            button.Active = false
+            task.wait(1)
+        end
+
+        -- Run script after countdown
+        onClick()
+
+        -- Reset button
+        button.Text = originalText
+        button.Active = true
+        button.AutoButtonColor = true
+        button:SetAttribute("OnCooldown", false)
+    end)
+end
+
+-- 🔘 Setup Buttons (with cooldown integration)
 for i, btn in ipairs(buttonData) do
     local b = Instance.new("TextButton", frame)
     b.Size = UDim2.new(1, -20, 0, 40)
@@ -71,7 +115,9 @@ for i, btn in ipairs(buttonData) do
     b.TextSize = 20
     b.Font = Enum.Font.FredokaOne
     b.TextColor3 = Color3.fromRGB(255, 255, 255)
-    b.MouseButton1Click:Connect(btn.onClick)
+
+    -- Use cooldown wrapper for clickable buttons
+    addCooldown(b, btn.text, btn.onClick)
 end
 
 -- Minimize Button
