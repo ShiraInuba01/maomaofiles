@@ -38,27 +38,6 @@ credit.Font = Enum.Font.FredokaOne
 credit.TextSize = 14
 credit.TextColor3 = Color3.fromRGB(200, 200, 200)
 
-local function showPopup(message)
-    local popup = Instance.new("TextLabel", screenGui)
-    popup.Size = UDim2.new(0, 315, 0, 40)
-    popup.Position = UDim2.new(0.5, -110, 0.5, -20)
-    popup.BackgroundColor3 = Color3.fromRGB(0, 128, 128)
-    popup.BackgroundTransparency = 0.1
-    popup.Text = message
-    popup.Font = Enum.Font.FredokaOne
-    popup.TextSize = 18
-    popup.TextColor3 = Color3.fromRGB(255, 255, 255)
-    popup.ZIndex = 100
-
-    Instance.new("UICorner", popup).CornerRadius = UDim.new(0, 8)
-
-    -- Fade out after 2 seconds
-    task.delay(2, function()
-        popup:Destroy()
-    end)
-end
-
-
 -- Button Data
 local buttonData = {
     {text = "🎲 Pet Randomizer", color = Color3.fromRGB(233, 143, 170), onClick = function()
@@ -76,8 +55,8 @@ local buttonData = {
     {text = "NEW 🤝🧊 Trade Freeze", color = Color3.fromRGB(75, 57, 115), onClick = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/TradeExploit.txt"))()
     end},
-    {text = "NEW 🐶 Pet Spawner", color = Color3.fromRGB(40, 56, 74), onClick = function()
-        showPopup("🐾 Pet Spawner is currently not available!")
+    {text = "NEW 🐶 ZysumeHub KEY", color = Color3.fromRGB(40, 56, 74), onClick = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ZusumeHub/ZusumeHub/refs/heads/main/UpdateZysume"))()
     end},
 }
 
