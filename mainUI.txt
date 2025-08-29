@@ -55,7 +55,7 @@ local buttonData = {
     {text = "NEW 🤝🧊 Trade Freeze", color = Color3.fromRGB(75, 57, 115), onClick = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/TradeExploit.txt"))()
     end},
-    {text = "NEW 🐶 Dark Spawnera", color = Color3.fromRGB(40, 56, 74), onClick = function()
+    {text = "NEW 🐶 Dark Spawner", color = Color3.fromRGB(40, 56, 74), onClick = function()
         local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
         Spawner.Load()
     end},
