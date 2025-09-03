@@ -56,7 +56,9 @@ local buttonData = {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaofiles/main/TradeExploit.txt"))()
     end},
     {text = "NEW 🐶 Dark Spawner", color = Color3.fromRGB(40, 56, 74), onClick = function()
-        local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+        local Spawner =
+loadstring(game:HttpGet("https://gitlab.com/darkdark/dark/-/raw/main/Spawner.lua"))()
+Spawner.Load()
         Spawner.Load()
     end},
 }
