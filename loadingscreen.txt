@@ -1,0 +1,181 @@
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local Lighting = game:GetService("Lighting")
+local GuiService = game:GetService("GuiService")
+local ContextActionService = game:GetService("ContextActionService")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local playerGui = player:FindFirstChildOfClass("PlayerGui") or player:WaitForChild("PlayerGui", 10)
+
+if not playerGui then return end
+
+-- 1. Insane Stacked Blur Effect (Blinds the background)
+local blur1 = Instance.new("BlurEffect")
+blur1.Size = 56
+blur1.Parent = Lighting
+
+local blur2 = Instance.new("BlurEffect")
+blur2.Size = 56
+blur2.Parent = Lighting
+
+-- 2. Full-Screen Blocking UI Layout
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "PomniLoadingScreen"
+screenGui.IgnoreGuiInset = true
+screenGui.ResetOnSpawn = false
+screenGui.DisplayOrder = 999999 
+screenGui.Parent = playerGui
+
+-- Dark Frosted Tint Background
+local background = Instance.new("Frame")
+background.Size = UDim2.new(1, 0, 1, 0)
+background.BackgroundColor3 = Color3.fromRGB(12, 10, 15) -- Deep dark void tint
+background.BackgroundTransparency = 0.35 
+background.Active = true 
+background.Parent = screenGui
+
+-- Main Container
+local container = Instance.new("Frame")
+container.Size = UDim2.new(0, 850, 0, 400)
+container.Position = UDim2.new(0.5, -425, 0.5, -200)
+container.BackgroundTransparency = 1
+container.Parent = background
+
+-- MASSIVE Title Text (Pomni Themed Colors)
+local loadingText = Instance.new("TextLabel")
+loadingText.Size = UDim2.new(1, 0, 0, 120)
+loadingText.Position = UDim2.new(0, 0, 0.05, 0)
+loadingText.BackgroundTransparency = 1
+loadingText.Text = "🎪 PomniRBLX Scripts 🎪"
+loadingText.Font = Enum.Font.FredokaOne
+loadingText.TextSize = 72 
+loadingText.TextColor3 = Color3.fromRGB(255, 223, 0) -- Gold/Yellow like her bells/buttons
+loadingText.TextStrokeTransparency = 0.2 
+loadingText.TextStrokeColor3 = Color3.fromRGB(180, 20, 30) -- Thick Deep Red Stroke to match her hat
+loadingText.Parent = container
+
+-- Text Gradient to give it a wacky cartoon look
+local textGrad = Instance.new("UIGradient")
+textGrad.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 235, 100)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 190, 0))
+}
+textGrad.Parent = loadingText
+
+-- Pomni Jester-Themed Loading Bar Background
+local barBackground = Instance.new("Frame")
+barBackground.Size = UDim2.new(0.8, 0, 0, 42) -- Slightly taller
+barBackground.Position = UDim2.new(0.1, 0, 0.65, 0)
+barBackground.BackgroundColor3 = Color3.fromRGB(25, 25, 35) -- Dark base
+barBackground.BorderSizePixel = 0
+barBackground.Parent = container
+
+-- Gold Border around the bar to look like her costume trims
+local barUIStroke = Instance.new("UIStroke")
+barUIStroke.Color = Color3.fromRGB(255, 215, 0)
+barUIStroke.Thickness = 3
+barUIStroke.Parent = barBackground
+
+local bgCorner = Instance.new("UICorner")
+bgCorner.CornerRadius = UDim.new(0.5, 0)
+bgCorner.Parent = barBackground
+
+-- Liquid Progress Bar Fill
+local barFill = Instance.new("Frame")
+barFill.Size = UDim2.new(0, 0, 1, 0)
+barFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+barFill.BorderSizePixel = 0
+barFill.ClipsDescendants = true 
+barFill.Parent = barBackground
+
+local fillCorner = Instance.new("UICorner")
+fillCorner.CornerRadius = UDim.new(0.5, 0)
+fillCorner.Parent = barFill
+
+-- Pomni Costume Blue & Red Liquid Gradient Wave
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(210, 30, 45)),    -- Pomni Red
+	ColorSequenceKeypoint.new(0.35, Color3.fromRGB(240, 40, 60)), -- Bright Red Highlight
+	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),  -- Pure White separation
+	ColorSequenceKeypoint.new(0.65, Color3.fromRGB(30, 110, 220)), -- Bright Blue Highlight
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 75, 170))     -- Pomni Blue
+}
+gradient.Offset = Vector2.new(-1, 0) 
+gradient.Parent = barFill
+
+-- 3. Block Menu Core & COMPLETE Movement Freeze
+local function sinkAction()
+    return Enum.ContextActionResult.Sink
+end
+
+ContextActionService:BindActionAtPriority(
+    "FreezeEverything",
+    sinkAction,
+    false,
+    3000, 
+    Enum.KeyCode.Escape,
+    Enum.KeyCode.ButtonStart,
+    Enum.KeyCode.W, Enum.KeyCode.A, Enum.KeyCode.S, Enum.KeyCode.D,
+    Enum.KeyCode.Up, Enum.KeyCode.Down, Enum.KeyCode.Left, Enum.KeyCode.Right,
+    Enum.KeyCode.Space
+)
+
+local freezeLoop = RunService.RenderStepped:Connect(function()
+    if GuiService.MenuIsOpen then
+        GuiService:CloseMenuWindow()
+    end
+    
+    local character = player.Character
+    if character then
+        local rootPart = character:FindFirstChild("HumanoidRootPart")
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if rootPart then
+            rootPart.Velocity = Vector3.zero
+            rootPart.RotVelocity = Vector3.zero
+        end
+        if humanoid then
+            humanoid.WalkSpeed = 0
+            humanoid.JumpPower = 0
+        end
+    end
+end)
+
+-- 4. Infinite Animation Logic
+local function startLoading()
+	local looping = true
+	
+	-- Text bounce / wacky jitter loop
+	task.spawn(function()
+		while looping do
+			local t1 = TweenService:Create(loadingText, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {TextSize = 76})
+			t1:Play()
+			task.wait(0.6)
+			local t2 = TweenService:Create(loadingText, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {TextSize = 72})
+			t2:Play()
+			task.wait(0.6)
+		end
+	end)
+
+	-- ENDLESS MOVING LIQUID RED/BLUE WAVE
+	task.spawn(function()
+		while looping do
+			gradient.Offset = Vector2.new(-1, 0)
+			local liquidTween = TweenService:Create(gradient, TweenInfo.new(1.8, Enum.EasingStyle.Linear), {Offset = Vector2.new(1, 0)})
+			liquidTween:Play()
+			liquidTween.Completed:Wait()
+		end
+	end)
+
+	-- Smoothly fill up to 95% and stay stuck
+	local tweenInfo = TweenInfo.new(5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+	local fillTween = TweenService:Create(barFill, tweenInfo, {Size = UDim2.new(0.95, 0, 1, 0)})
+	fillTween:Play()
+end
+
+task.spawn(startLoading)
